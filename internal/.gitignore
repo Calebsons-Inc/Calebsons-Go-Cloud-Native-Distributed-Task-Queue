@@ -1,0 +1,11 @@
+# Ignore everything in the repo
+/*
+
+# Except the .gitignore itself
+!.gitignore
+
+# Except README files
+!README.md
+!README
+!readme.md
+!readme

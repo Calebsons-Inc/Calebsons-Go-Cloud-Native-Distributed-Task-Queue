@@ -1,11 +1,16 @@
-# Ignore everything in the repo
-/*
+# Go build
+bin/
+dist/
+*.exe
+*.out
 
-# Except the .gitignore itself
-!.gitignore
+# Modules
+go.sum
 
-# Except README files
-!README.md
-!README
-!readme.md
-!readme
+# Logs
+*.log
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/

@@ -1,0 +1,3 @@
+module calebsons_inc/calebsons_go_cloud_native_distributed_task_queue
+
+go 1.22
