@@ -1,41 +1,73 @@
 # Calebsons Go Cloud-Native — Distributed Task Queue
 
 ## Overview
-A distributed task queue system with worker pools, gRPC communication, and Kubernetes-ready deployments.
+A distributed task queue with an in-process worker pool, HTTP API, retries,
+and a multi-page ops dashboard (shared side rail on overview and every demo).
+Five real-world demos each get their own page so you can enqueue and watch
+work for that workflow in isolation.
 
-## Tech Stack
-- Go
-- gRPC
-- Redis / NATS
-- Kubernetes
+## Tech stack
+- Go 1.22+
+- In-memory broker + worker pool (no external deps for local demos)
+- Embedded HTML/CSS/JS dashboard
+
+## Demo use cases
+| Kind | Page | What it simulates |
+|------|------|-------------------|
+| `email` | `/demos/email` | Welcome emails & notifications |
+| `media` | `/demos/media` | Image / video processing |
+| `reports` | `/demos/reports` | Invoice & report generation |
+| `webhooks` | `/demos/webhooks` | Third-party sync with flaky retries |
+| `cleanup` | `/demos/cleanup` | Data cleanup & maintenance |
 
 ## Features
-- Distributed workers
-- Task scheduling
-- Retry logic
-- gRPC API
-- Horizontal scaling
+- Typed tasks by demo `kind`
+- Enqueue / list / get / cancel
+- Configurable worker concurrency
+- Retry with exponential backoff and dead-letter status
+- Shared dashboard shell: overview + per-demo pages
+- Demo seed tasks on startup (`SEED_DEMO=true`)
 
 ## Architecture
 ```mermaid
 flowchart TD
-    PRODUCER[Producers / Services] --> QUEUE[Redis / NATS Broker]
-    QUEUE --> WORKER1[Go Worker 1]
-    QUEUE --> WORKER2[Go Worker 2]
-    WORKER1 --> STATE[Task State Store]
-    WORKER2 --> STATE
-    INFRA[Kubernetes Deployments] -.-> WORKER1
-    INFRA -.-> WORKER2
+    HOME[Dashboard overview] --> DEMO[Demo pages]
+    DEMO --> API[HTTP API]
+    API --> QUEUE[In-memory ready queue]
+    QUEUE --> W[Worker pool]
+    W --> HANDLER[Demo handlers]
+    HANDLER --> STATE[Task state + result]
+    STATE --> DEMO
 ```
 
-## Setup
-    go mod tidy
-    go run cmd/server/main.go
+## Quick start
+```bash
+go run ./cmd/server
+```
 
-## Deployment
-- Kubernetes
-- Helm (optional)
+Open http://localhost:8080
+
+| Env | Default | Meaning |
+|-----|---------|---------|
+| `PORT` | `8080` | HTTP listen port |
+| `WORKERS` | `3` | Concurrent worker goroutines |
+| `SEED_DEMO` | `true` | Enqueue one sample job per demo |
+
+## API
+- `GET /health`
+- `GET /api/demos` — catalog of demo pages
+- `GET /api/demos/{kind}`
+- `GET /api/stats?kind=`
+- `GET /api/tasks?kind=&status=&page=&limit=`
+- `POST /api/tasks` — body `{ "kind", "name", "payload", "max_attempts" }`
+- `GET /api/tasks/{id}`
+- `POST /api/tasks/{id}/cancel`
+
+## Docs
+See [WALKTHROUGH.md](./WALKTHROUGH.md) for setup, UI checks, and curl examples.
 
 ## Roadmap
-- Add dashboard UI
-- Add delayed jobs
+- Redis / NATS broker
+- Delayed jobs (`run_at`)
+- gRPC service surface
+- Kubernetes / Helm deploys

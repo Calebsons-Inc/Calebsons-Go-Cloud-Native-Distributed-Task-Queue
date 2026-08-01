@@ -1,11 +1,3 @@
-# Ignore everything in the repo
-/*
-
-# Except the .gitignore itself
-!.gitignore
-
-# Except README files
-!README.md
-!README
-!readme.md
-!readme
+# Keep package sources; ignore local scratch only
+*.log
+*.tmp

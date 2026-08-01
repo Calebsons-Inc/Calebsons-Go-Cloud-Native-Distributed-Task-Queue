@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Overview — Calebsons Queue</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="dash-body" data-page="overview">
+  <div class="atmosphere" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="dash">
+    <aside class="rail" aria-label="Dashboard">
+      <a class="rail-brand" href="/">Calebsons</a>
+      <p class="rail-label">Dashboard</p>
+      <nav class="rail-nav" id="rail-nav"></nav>
+    </aside>
+
+    <main class="dash-main">
+      <header class="demo-hero">
+        <p class="live" id="live-badge">
+          <span class="live-dot"></span>
+          <span id="live-label">connecting</span>
+        </p>
+        <p class="demo-kicker">Dashboard · overview</p>
+        <h1 class="demo-title brand-inline">Calebsons</h1>
+        <p class="demo-blurb">Distributed task queue — pick a demo from the rail or cards, then watch the shared worker pool process jobs live.</p>
+      </header>
+
+      <div class="meters" id="meters"></div>
+
+      <div class="section-head">
+        <h2>Use-case demos</h2>
+        <p>Each page scopes meters and tasks to that workflow.</p>
+      </div>
+      <div class="demo-grid" id="demo-grid"></div>
+
+      <div class="stream home-stream">
+        <div class="stream-head">
+          <h2>All recent tasks</h2>
+          <div class="filters" role="tablist" aria-label="Filter by status">
+            <button type="button" class="filter is-active" data-status="" role="tab" aria-selected="true">All</button>
+            <button type="button" class="filter" data-status="queued" role="tab">Queued</button>
+            <button type="button" class="filter" data-status="running" role="tab">Running</button>
+            <button type="button" class="filter" data-status="completed" role="tab">Done</button>
+            <button type="button" class="filter" data-status="failed" role="tab">Failed</button>
+            <button type="button" class="filter" data-status="dead" role="tab">Dead</button>
+            <button type="button" class="filter" data-status="canceled" role="tab">Canceled</button>
+          </div>
+        </div>
+        <ul class="task-list" id="task-list" aria-live="polite"></ul>
+        <p class="empty" id="empty-state" hidden>No tasks match this filter.</p>
+        <div class="pager">
+          <button type="button" id="prev-page" disabled>Previous</button>
+          <span id="page-label">Page 1</span>
+          <button type="button" id="next-page" disabled>Next</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/shared.js"></script>
+  <script src="/static/home.js"></script>
+</body>
+</html>
